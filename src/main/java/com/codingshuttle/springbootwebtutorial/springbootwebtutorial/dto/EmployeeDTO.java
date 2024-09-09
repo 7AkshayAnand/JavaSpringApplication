@@ -1,7 +1,10 @@
 package com.codingshuttle.springbootwebtutorial.springbootwebtutorial.dto;
+import lombok.Getter;
+
 import java.time.LocalDate;
 public class EmployeeDTO {
     private Long id;
+    @Getter
     private String name;
     private String email;
     private Integer age;
@@ -26,10 +29,6 @@ public class EmployeeDTO {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getName() {
-        return name;
     }
 
     public void setName(String name) {

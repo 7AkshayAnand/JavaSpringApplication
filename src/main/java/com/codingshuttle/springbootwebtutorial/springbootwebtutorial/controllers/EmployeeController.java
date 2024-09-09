@@ -8,14 +8,12 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping(path="employees")
 public class EmployeeController {
-//    @GetMapping(path="/getMessage")
-//    public String getMsg(){
-//        return "Secret has been revealed and the Message is HELLO WORLD!!";
-//    }
+
 
     private final EmployeeService employeeService;
     public EmployeeController(EmployeeService employeeService){
@@ -27,6 +25,7 @@ public class EmployeeController {
          return employeeService.getEmployeeById(employeeId);
 
      }
+
     @GetMapping
     public List<EmployeeDTO> getAllEmployee(@RequestParam(required = false) Integer age,@RequestParam(required = false) String sortBy){
         return employeeService.getAllEmployee();
@@ -37,6 +36,19 @@ public class EmployeeController {
         return employeeService.createNewEmployee(inputEmployee);
     }
 
+    @PutMapping(path="/{employeeId}")
+    public EmployeeDTO updateEmployeeById(@RequestBody EmployeeDTO employeeDTO, @PathVariable Long employeeId){
+        return employeeService.updateEmployeeById(employeeId,employeeDTO);
+    }
 
+    @DeleteMapping(path="/{employeeId}")
+    public boolean deleteEmployeeById( @PathVariable Long employeeId){
+       return employeeService.deleteEmployeeById(employeeId);
+    }
+
+    @PatchMapping(path="/{employeeId}")
+    public EmployeeDTO updatePartialEmployeeById(@RequestBody Map<String,Object> updates, @PathVariable Long employeeId){
+        return employeeService.updatePartialEmployeeById(employeeId,updates);
+    }
 
 }
