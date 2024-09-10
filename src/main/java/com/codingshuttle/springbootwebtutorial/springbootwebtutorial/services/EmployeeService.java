@@ -22,10 +22,12 @@ public class EmployeeService {
         this.modelMapper=modelMapper;
     }
 
-    public EmployeeDTO getEmployeeById(Long id){
-        EmployeeEntity employeeEntity=employeeRepository.findById(id).orElse(null);
+    public Optional<EmployeeDTO> getEmployeeById(Long id){
+//        EmployeeEntity employeeEntity=employeeRepository.findById(id).orElse(null);
+//
+//       return  modelMapper.map(employeeEntity, EmployeeDTO.class);
 
-       return  modelMapper.map(employeeEntity, EmployeeDTO.class);
+        return employeeRepository.findById(id).map(employeeEntity -> modelMapper.map(employeeEntity,EmployeeDTO.class));
 
     }
     public List<EmployeeDTO> getAllEmployee(){
@@ -62,6 +64,7 @@ public class EmployeeService {
 
     public EmployeeDTO updatePartialEmployeeById(Long employeeId, Map<String,Object> updates){
         boolean exists=isExistsEmployeeId(employeeId);
+        if(!exists) return null;
   //we are only updating the fields that are present in updates , not all fields so we will use reflection
 //        where we can directly go to an object and we can update the field of that object direclty
        EmployeeEntity employeeEntity=employeeRepository.findById(employeeId).get();
