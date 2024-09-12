@@ -1,4 +1,5 @@
 package com.codingshuttle.springbootwebtutorial.springbootwebtutorial.dto;
+import com.codingshuttle.springbootwebtutorial.springbootwebtutorial.Annotation.EmployeeRoleValidation;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.*;
 import lombok.*;
@@ -29,13 +30,13 @@ public class EmployeeDTO {
    private Double salary;
 
    @NotBlank(message="Role cannot be null")
-   @Pattern(regexp="^(ADMIN|USER)",message = "role of employee can be user or admin")
+   @EmployeeRoleValidation
    private String role;//Admin,user
 
     @PastOrPresent(message = "date of joining cannot be in future")
     private LocalDate dateOfJoining;
 
-    @AssertTrue(message = "Employee should be active")
+    @AssertTrue(message = "Employee should be active that is true")
     @JsonProperty("isActive")
     private Boolean isActive;
 
