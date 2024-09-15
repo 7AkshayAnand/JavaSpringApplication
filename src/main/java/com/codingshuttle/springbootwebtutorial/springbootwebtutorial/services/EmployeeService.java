@@ -2,6 +2,7 @@ package com.codingshuttle.springbootwebtutorial.springbootwebtutorial.services;
 
 import com.codingshuttle.springbootwebtutorial.springbootwebtutorial.dto.EmployeeDTO;
 import com.codingshuttle.springbootwebtutorial.springbootwebtutorial.entities.EmployeeEntity;
+import com.codingshuttle.springbootwebtutorial.springbootwebtutorial.exceptions.ResourceNotFoundException;
 import com.codingshuttle.springbootwebtutorial.springbootwebtutorial.repositories.EmployeeRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -46,6 +47,7 @@ public class EmployeeService {
         return modelMapper.map(savedemployee, EmployeeDTO.class);
     }
     public EmployeeDTO updateEmployeeById(Long employeeId,EmployeeDTO employeeDTO){
+        if(!isExistsEmployeeId(employeeId)) throw new ResourceNotFoundException("Employee not found with id "+employeeId);
         EmployeeEntity employeeEntity=modelMapper.map(employeeDTO,EmployeeEntity.class);
         employeeEntity.setId(employeeId);
         EmployeeEntity savedEmp=employeeRepository.save(employeeEntity);
@@ -57,14 +59,15 @@ public class EmployeeService {
     }
     public boolean deleteEmployeeById(Long employeeId){
         boolean exists=isExistsEmployeeId(employeeId);
-        if(!exists)return false;
+
+        if(!exists) throw new ResourceNotFoundException("Employee not found with id "+employeeId);;
        employeeRepository.deleteById(employeeId);
        return true;
     }
 
     public EmployeeDTO updatePartialEmployeeById(Long employeeId, Map<String,Object> updates){
         boolean exists=isExistsEmployeeId(employeeId);
-        if(!exists) return null;
+        if(!exists)  throw new ResourceNotFoundException("Employee not found with id "+employeeId);;
   //we are only updating the fields that are present in updates , not all fields so we will use reflection
 //        where we can directly go to an object and we can update the field of that object direclty
        EmployeeEntity employeeEntity=employeeRepository.findById(employeeId).get();
